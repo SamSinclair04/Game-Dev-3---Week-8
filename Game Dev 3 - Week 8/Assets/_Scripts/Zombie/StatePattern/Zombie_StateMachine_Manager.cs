@@ -1,5 +1,6 @@
 using UnityEngine;
 using GameDevWithMarco.Enemy;
+using Unity.VisualScripting;
 
 namespace GameDevWithMarco.StatePattern
 {
@@ -17,6 +18,7 @@ namespace GameDevWithMarco.StatePattern
         //These variables will store references to the script that manage each state 
         public Zombie_StateMachine_IdleState idleState = new Zombie_StateMachine_IdleState();
         public Zombie_StateMachine_Moving movingState = new Zombie_StateMachine_Moving();
+        public Zombie_StateMachine_AttackState attackState = new Zombie_StateMachine_AttackState();
 
 
         //Variables to manage animations
@@ -58,10 +60,22 @@ namespace GameDevWithMarco.StatePattern
             currentState.OnTriggerEnter(this, other);
         }
 
+
+        private void OnCollisionExit(Collision collision)
+        {
+            currentState?.OnCollisionExit(this, collision);
+        }
+        
+    
+        
+
+
+
+
         public void SwitchState(Zombie_StateMachine_BaseState stateWeWantToUse)
         {
             currentState = stateWeWantToUse;
-            currentState.EnterState(this);
+            currentState?.EnterState(this);
         }
 
     }
