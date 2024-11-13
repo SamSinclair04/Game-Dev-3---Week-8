@@ -33,7 +33,37 @@ namespace GameDevWithMarco.StatePattern
         {
             animScript = GetComponent<Zombie_Animations>();         //Finds the Animator        
             zombieAiScript = GetComponent<Zombie_Ai>();             //Will find the ai script        
-            zombieParent = GetComponent<Zombie_Parent>();           //Will find the parent script
+            zombieParent = GetComponent<Zombie_Parent>();
+
+            //Will find the parent script
+
+            currentState = idleState;
+            currentState?.EnterState(this);
+
         }
+
+        private void Update()
+        {
+            currentState.UpdateState(this);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            currentState.OnCollisionEnter(this, collision);
+    
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            currentState.OnTriggerEnter(this, other);
+        }
+
+        public void SwitchState(Zombie_StateMachine_BaseState stateWeWantToUse)
+        {
+            currentState = stateWeWantToUse;
+            currentState.EnterState(this);
+        }
+
     }
+
 }
